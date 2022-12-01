@@ -1,6 +1,8 @@
 # WPCTF2022
 
 Confused about the exploit code? Checkout the exploit [here](./expl.py)!
+
+(Or if you want to try the CTF, see the files [here](https://github.com/WuerthPhoenix/wpctf2022)!
 ## Reconnaissance: WP{h1d3_http_h34d3rz}
 
 For the first flag simply connect to your instance and look at the headers the server responds with, you should see a custom header called `Wp-Ctf` with the flag.
