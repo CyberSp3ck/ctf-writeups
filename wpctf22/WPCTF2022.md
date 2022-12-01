@@ -237,7 +237,7 @@ def write_file(self, path):
         files={"file": (name, open("test.png", "rb"))},
         data={"group_id": full_path},
     )
-		for file in self.list_files():
+    for file in self.list_files():
         if file.get('name') == name:
             id = file.get('id')
             response = self.s.get(_(f'/api/files.php?id={id}'))
